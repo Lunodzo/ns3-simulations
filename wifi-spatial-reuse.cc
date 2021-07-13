@@ -154,6 +154,7 @@ main (int argc, char *argv[])
 
   WifiHelper wifi;
   wifi.SetStandard (WIFI_STANDARD_80211ax_5GHZ);
+  //Enable OBSS color which was set to TRUE on variable declaration
   if (enableObssPd)
     {
       wifi.SetObssPdAlgorithm ("ns3::ConstantObssPdAlgorithm",
@@ -188,6 +189,8 @@ main (int argc, char *argv[])
 
   Ptr<WifiNetDevice> apDevice = apDeviceA.Get (0)->GetObject<WifiNetDevice> ();
   Ptr<ApWifiMac> apWifiMac = apDevice->GetMac ()->GetObject<ApWifiMac> ();
+
+  //Enable OBSS Color of an AP to be 1
   if (enableObssPd)
     {
       apDevice->GetHeConfiguration ()->SetAttribute ("BssColor", UintegerValue (1));
@@ -214,6 +217,8 @@ main (int argc, char *argv[])
 
   Ptr<WifiNetDevice> ap2Device = apDeviceB.Get (0)->GetObject<WifiNetDevice> ();
   apWifiMac = ap2Device->GetMac ()->GetObject<ApWifiMac> ();
+
+  //Define color to a second access point
   if (enableObssPd)
     {
       ap2Device->GetHeConfiguration ()->SetAttribute ("BssColor", UintegerValue (2));
