@@ -23,6 +23,38 @@
 #include "ns3/internet-module.h"
 #include "ns3/yans-wifi-helper.h"
 #include "ns3/ssid.h"
+#include "ns3/command-line.h"
+#include "ns3/config.h"
+#include "ns3/string.h"
+#include "ns3/spectrum-wifi-helper.h"
+#include "ns3/ssid.h"
+#include "ns3/mobility-helper.h"
+#include "ns3/application-container.h"
+#include "ns3/multi-model-spectrum-channel.h"
+#include "ns3/wifi-net-device.h"
+#include "ns3/ap-wifi-mac.h"
+#include "ns3/he-configuration.h"
+#include "ns3/packet-socket-helper.h"
+#include "ns3/packet-socket-client.h"
+#include "ns3/packet-socket-server.h"
+#include "ns3/command-line.h"
+#include "ns3/config.h"
+#include "ns3/uinteger.h"
+#include "ns3/boolean.h"
+#include "ns3/double.h"
+#include "ns3/string.h"
+#include "ns3/log.h"
+#include "ns3/yans-wifi-helper.h"
+#include "ns3/ssid.h"
+#include "ns3/mobility-helper.h"
+#include "ns3/internet-stack-helper.h"
+#include "ns3/ipv4-address-helper.h"
+#include "ns3/udp-client-server-helper.h"
+#include "ns3/packet-sink-helper.h"
+#include "ns3/on-off-helper.h"
+#include "ns3/ipv4-global-routing-helper.h"
+#include "ns3/packet-sink.h"
+#include "ns3/yans-wifi-channel.h"
 
 // Default Network Topology
 //
@@ -50,6 +82,8 @@ main (int argc, char *argv[])
   uint32_t nCsma = 3;
   uint32_t nWifi = 3;
   bool tracing = false;
+  // bool enableObssPd = true;
+  // double obssPdThreshold = -72.0; // dBm
 
   CommandLine cmd (__FILE__);
   cmd.AddValue ("nCsma", "Number of \"extra\" CSMA nodes/devices", nCsma);
@@ -119,12 +153,22 @@ main (int argc, char *argv[])
   //Here, it is asking the helper to use the AARF algorithm
   WifiHelper wifi;
   wifi.SetRemoteStationManager ("ns3::AarfWifiManager");
+  //wifi.SetStandard(WIFI_STANDARD_80211n_24GHZ);
+  // //Enable OBSS
+  // if (enableObssPd)
+  // {
+  //   wifi.SetObssPdAlgorithm("ns3::ConstantObssPdAlgorithm",
+  //                           "ObssPdLevel", DoubleValue(obssPdThreshold));
+  // }
+  
 
   WifiMacHelper mac;
   Ssid ssid = Ssid ("ns-3-ssid");
   mac.SetType ("ns3::StaWifiMac",
                "Ssid", SsidValue (ssid),
                "ActiveProbing", BooleanValue (false));
+               //wifi.SetStandard(WIFI_STANDARD_80211ax_24GHZ);
+
 
   NetDeviceContainer staDevices;
   staDevices = wifi.Install (phy, mac, wifiStaNodes);
