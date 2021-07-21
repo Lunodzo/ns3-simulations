@@ -75,7 +75,9 @@
    std::string phyRate = "HtMcs7";                    /* Physical layer bitrate. */
    double simulationTime = 10;                        /* Simulation time in seconds. */
    bool pcapTracing = true;                          /* PCAP Tracing is enabled or not. */
- 
+   bool enableObssPd = true; //Enable BSS color
+   double obssPdThreshold = -72.0; // dBm
+
    /* Command line argument parser setup. */
    CommandLine cmd (__FILE__);
    cmd.AddValue ("payloadSize", "Payload size in bytes", payloadSize);
@@ -110,7 +112,14 @@
    WifiMacHelper wifiMac;
    WifiHelper wifiHelper;
    wifiHelper.SetStandard (WIFI_STANDARD_80211ax_5GHZ);
- 
+
+   //Enable OBSS color which was set to TRUE on variable declaration
+   if (enableObssPd)
+   {
+       wifiHelper.SetObssPdAlgorithm("ns3::ConstantObssPdAlgorithm",
+                                     "ObssPdLevel", DoubleValue(obssPdThreshold));
+   }
+
    /* Set up Legacy Channel */
    YansWifiChannelHelper wifiChannel;
    wifiChannel.SetPropagationDelay ("ns3::ConstantSpeedPropagationDelayModel");
@@ -136,14 +145,23 @@
  
    NetDeviceContainer apDevice;
    apDevice = wifiHelper.Install (wifiPhy, wifiMac, apWifiNode);
- 
+
+   //Ptr<WifiNetDevice> apDevicee = apDevice.Get(0)->GetObject<WifiNetDevice>();
+   //Ptr<ApWifiMac> apWifiMac = apDevicee->GetMac()->GetObject<ApWifiMac>();
+
    /* Configure STA */
    wifiMac.SetType ("ns3::StaWifiMac",
                     "Ssid", SsidValue (ssid));
  
    NetDeviceContainer staDevices;
    staDevices = wifiHelper.Install (wifiPhy, wifiMac, staWifiNode);
- 
+
+   //Enable OBSS Color of an AP to be 1
+//    if (enableObssPd)
+//    {
+//        apDevicee->GetHeConfiguration()->SetAttribute("BssColor", UintegerValue(1));
+//    }
+
    /* Mobility model */
    MobilityHelper mobility;
    Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
