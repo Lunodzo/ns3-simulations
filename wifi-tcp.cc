@@ -117,7 +117,7 @@
    if (enableObssPd)
    {
        wifiHelper.SetObssPdAlgorithm("ns3::ConstantObssPdAlgorithm",
-                                     "ObssPdLevel", DoubleValue(obssPdThreshold));
+                                     "ObssPdLevel", DoubleValue(obssPdThreshold));//Using the variable
    }
 
    /* Set up Legacy Channel */
