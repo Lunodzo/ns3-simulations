@@ -146,9 +146,6 @@
    NetDeviceContainer apDevice;
    apDevice = wifiHelper.Install (wifiPhy, wifiMac, apWifiNode);
 
-   //Ptr<WifiNetDevice> apDevicee = apDevice.Get(0)->GetObject<WifiNetDevice>();
-   //Ptr<ApWifiMac> apWifiMac = apDevicee->GetMac()->GetObject<ApWifiMac>();
-
    /* Configure STA */
    wifiMac.SetType ("ns3::StaWifiMac",
                     "Ssid", SsidValue (ssid));
@@ -156,11 +153,6 @@
    NetDeviceContainer staDevices;
    staDevices = wifiHelper.Install (wifiPhy, wifiMac, staWifiNode);
 
-   //Enable OBSS Color of an AP to be 1
-//    if (enableObssPd)
-//    {
-//        apDevicee->GetHeConfiguration()->SetAttribute("BssColor", UintegerValue(1));
-//    }
 
    /* Mobility model */
    MobilityHelper mobility;
